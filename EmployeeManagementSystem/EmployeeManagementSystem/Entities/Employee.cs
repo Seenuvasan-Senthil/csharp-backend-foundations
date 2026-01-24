@@ -4,6 +4,8 @@ using System.Text;
 
 namespace EmployeeManagementSystem.Entities
 {
+    //abstract->controls whether(instantiated or not)
+    //this constructor protected->controls who
     public abstract class Employee{  //Employee is a base domain concepts that must be visible but never be instantiated directly.
         private int _id;      
         private string _name;
