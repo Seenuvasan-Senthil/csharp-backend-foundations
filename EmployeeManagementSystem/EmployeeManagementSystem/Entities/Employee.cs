@@ -17,7 +17,7 @@ namespace EmployeeManagementSystem.Entities
 
         protected internal void SetId(int id)  //encapsulation, controlled mutation
         {
-            if (id != 0) throw new InvalidOperationException("Id is Already set.");
+            if (Id != 0) throw new InvalidOperationException("Id is Already set.");
             Id = id;
         }
 
