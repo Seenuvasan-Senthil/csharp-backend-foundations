@@ -15,25 +15,25 @@ namespace EmployeeManagementSystem.Entities
         //properties(controlled access)
         public int Id { get; private set; }
 
-        protected internal void SetId(int id)
+        protected internal void SetId(int id)  //encapsulation, controlled mutation
         {
             if (id != 0) throw new InvalidOperationException("Id is Already set.");
             Id = id;
         }
 
-        public string Name { get; }
+        public string Name { get; } //immutable identity set once in constructor.
 
         public string Department { get; }
 
-        public decimal Salary { get; private set; }
+        public decimal Salary { get; private set; } //controlled mutation
 
-        public void UpdateSalary(decimal newSalary)
+        public void UpdateSalary(decimal newSalary) //encapsulation
         {
             if (newSalary < 0) throw new ArgumentException("Salary Must Be Positive");
             Salary = newSalary;  //encapsulation
         }
 
-        //parametarized constructor -> creating a valid employee -> to avoid using if, else everywhere.
+        //parametarized constructor -> initialize a valid employee-at creation itself.
         protected Employee(string name, string department, decimal salary) //protected->Because Employee is a base domain concept and should only be instantiated through concrete derived types.
         {
             if (string.IsNullOrWhiteSpace(name))

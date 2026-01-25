@@ -5,9 +5,10 @@ using System.Text;
 
 namespace EmployeeManagementSystem.Services
 {
-    public interface IEmployeeService
+    //IEmployeeService.cs->Contract only
+    public interface IEmployeeService //interface-any implementations must provide these behaviours-abstraction in action
     {
-        void AddEmployee(Employee employee);
+        void AddEmployee(Employee employee); //our empservice should be able to do these behaviours.
         Employee GetEmployeeById(int id);
         List<Employee> GetAllEmployees();
         void UpdateSalary(int id, decimal newSalary);
