@@ -26,21 +26,21 @@ namespace EmployeeManagementSystem.Entities
         public string Name
         {
             get { return _name; }
-            protected set {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("Name Cannot be Empty.");
-                _name = value; }
+            //protected set {
+            //    if (string.IsNullOrWhiteSpace(value))
+            //        throw new ArgumentException("Name Cannot be Empty.");
+            //    _name = value; }
         }
 
         public string Department
         {
             get { return _department; }
-            protected set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("Department cannot be Empty.");
-                _department = value;
-            }
+            //protected set
+            //{
+            //    if (string.IsNullOrWhiteSpace(value))
+            //        throw new ArgumentException("Department cannot be Empty.");
+            //    _department = value;
+            //}
         }
 
         public decimal Salary
