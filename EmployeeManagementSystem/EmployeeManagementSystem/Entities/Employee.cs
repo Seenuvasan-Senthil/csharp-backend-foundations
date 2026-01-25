@@ -13,51 +13,30 @@ namespace EmployeeManagementSystem.Entities
         private decimal _salary;  //private->prevents uncontrolled modification
 
         //properties(controlled access)
-        public int Id
-        {
-            get { return _id; }
-            protected internal set
-            {
-                if (Id != 0) throw new InvalidOperationException("Id is Already Set");
-                Id = value;
-            }
-        }
+        public int Id { get; private set; }
 
-        public string Name
-        {
-            get { return _name; }
-            //protected set {
-            //    if (string.IsNullOrWhiteSpace(value))
-            //        throw new ArgumentException("Name Cannot be Empty.");
-            //    _name = value; }
-        }
+        public string Name { get; }
 
-        public string Department
-        {
-            get { return _department; }
-            //protected set
-            //{
-            //    if (string.IsNullOrWhiteSpace(value))
-            //        throw new ArgumentException("Department cannot be Empty.");
-            //    _department = value;
-            //}
-        }
+        public string Department { get; }
 
-        public decimal Salary
+        public decimal Salary { get; private set; }
+
+        public void UpdateSalary(decimal newSalary)
         {
-            get { return _salary; }
-            protected set
-            {
-                if (value < 0)
-                    throw new ArgumentException("Salary Cannot be Negative");
-                _salary = value;
-            }
+            if (newSalary < 0) throw new ArgumentException("Salary Must Be Positive");
+            Salary = newSalary;  //encapsulation
         }
 
         //parametarized constructor -> creating a valid employee -> to avoid using if, else everywhere.
-        protected Employee(int id, string name, string department, decimal salary) //protected->Because Employee is a base domain concept and should only be instantiated through concrete derived types.
+        protected Employee(string name, string department, decimal salary) //protected->Because Employee is a base domain concept and should only be instantiated through concrete derived types.
         {
-            Id = id;
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name is Required");
+            if (string.IsNullOrWhiteSpace(department))
+                throw new ArgumentException("Dept is Required");
+            if (salary < 0)
+                throw new ArgumentException("Salary cant negative");
+
             Name = name;
             Department = department;
             Salary = salary;
