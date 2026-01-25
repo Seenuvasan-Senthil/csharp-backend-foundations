@@ -15,6 +15,12 @@ namespace EmployeeManagementSystem.Entities
         //properties(controlled access)
         public int Id { get; private set; }
 
+        protected internal void SetId(int id)
+        {
+            if (id != 0) throw new InvalidOperationException("Id is Already set.");
+            Id = id;
+        }
+
         public string Name { get; }
 
         public string Department { get; }
