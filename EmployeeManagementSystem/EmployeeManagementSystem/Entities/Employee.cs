@@ -27,7 +27,7 @@ namespace EmployeeManagementSystem.Entities
 
         public decimal Salary { get; private set; } //controlled mutation
 
-        public void UpdateSalary(decimal newSalary) //encapsulation
+        public virtual void UpdateSalary(decimal newSalary) //encapsulation, virtual->so manager can override it-polymorphism
         {
             if (newSalary < 0) throw new ArgumentException("Salary Must Be Positive");
             Salary = newSalary;  //encapsulation

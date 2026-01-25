@@ -7,24 +7,20 @@ namespace EmployeeManagementSystem.Entities
     public class Manager : Employee
     {
         //manager's specific fields are here
-        private int _teamSize; //uncontrolled access prevention
-        
-        //controlled access via property below
-        public int TeamSize
-        {
-            get { return _teamSize; }
-            private set
-            {
-                if (value < 0)
-                    throw new ArgumentException("TeamSize Cannot be Empty .");
-                _teamSize = value;
-            }
-        }
+        public int TeamSize { get; }
 
         //paramettarized constructor - creates valid object
-        public Manager(int id, string name, string department, decimal salary, int teamSize) : base(id, name, department, salary)
+        public Manager(string name, string department, decimal salary, int teamSize) : base(name, department, salary)
         {
+            if (teamSize <= 0) throw new ArgumentException("TeamSize cannot be Empty.");
             TeamSize = teamSize;
+        }
+
+        //polymorphism-manager may have 10% bonus on emp salary, so polymorphism applied here. 
+        public override void UpdateSalary(decimal newSalary)
+        {
+            decimal managerSalary = newSalary * 1.10m;
+            base.UpdateSalary(managerSalary);
         }
 
         //polymorphism - manager specific details - overriding generic emp method
