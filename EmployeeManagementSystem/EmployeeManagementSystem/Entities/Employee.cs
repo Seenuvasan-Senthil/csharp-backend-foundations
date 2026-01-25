@@ -16,7 +16,11 @@ namespace EmployeeManagementSystem.Entities
         public int Id
         {
             get { return _id; }
-            private set { _id = value; }
+            protected internal set
+            {
+                if (Id != 0) throw new InvalidOperationException("Id is Already Set");
+                Id = value;
+            }
         }
 
         public string Name
