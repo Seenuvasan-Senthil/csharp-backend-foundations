@@ -45,7 +45,7 @@ namespace EmployeeManagementSystem.Services
 
             if (employee == null) throw new InvalidOperationException("Employee not Found.");
 
-            employee.UpdateSalary(newSalary);
+            employee.UpdateSalary(newSalary); //runtime polymorphism
         }
 
         public void RemoveEmployee(int id)

@@ -18,8 +18,16 @@ namespace EmployeeManagementSystem
                 teamSize: 5
                 );
 
+            Employee emp2 = new Tester(
+                name: "Venkat",
+                department: "Strata",
+                salary: 500000,
+                techStack: "Cypress"
+                );
+
             //Add employee .
             employeeService.AddEmployee(emp1);
+            employeeService.AddEmployee(emp2);
 
             //Display all Employee
             Console.WriteLine("Employees: ");
