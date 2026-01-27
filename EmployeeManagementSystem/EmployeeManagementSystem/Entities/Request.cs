@@ -31,7 +31,7 @@ namespace EmployeeManagementSystem.Entities
             Status = "Approved";
         }
 
-        internal void Rejected()
+        internal void Rejecte()
         {
             Status = "Rejected";
         }
