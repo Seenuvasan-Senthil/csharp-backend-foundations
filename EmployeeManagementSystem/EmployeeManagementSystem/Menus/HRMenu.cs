@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using EmployeeManagementSystem.Services;
+using EmployeeManagementSystem.Entities;
 using System;
 using System.Net.Security;
 
@@ -41,19 +42,19 @@ namespace EmployeeManagementSystem.Menus
                 switch (choice)
                 {
                     case "1":
-                        //Add
+                        AddEmployeeFlow();
                         break;
 
                     case "2":
-                        //Remove
+                        RemoveEmployeeFlow();
                         break;
 
                     case "3":
-                        //ViewAll
+                        ViewAllEmployees();
                         break;
 
                     case "4":
-                        //UpdateSalary
+                        UpdateSalaryFlow();
                         break;
 
                     case "0":
@@ -67,10 +68,93 @@ namespace EmployeeManagementSystem.Menus
             }
         }
 
+        //private helpers, private-only to HR
+
         private bool Authenticate()
         {
             Console.WriteLine("Enter Hr Secret Key: ");
             return int.TryParse(Console.ReadLine(), out int key) && key == HR_SECRET_KEY; 
+        }
+
+        private void AddEmployeeFlow()
+        {
+            Console.WriteLine("\nSelect Employee Type:");
+            Console.WriteLine("1. Manager");
+            Console.WriteLine("2. Tester");
+            Console.WriteLine("Enter your Choice: ");
+
+            string typeChoice = Console.ReadLine();
+
+            Console.WriteLine("Name:");
+            string name = Console.ReadLine();
+
+            Console.WriteLine("Department:");
+            string department = Console.ReadLine();
+
+            Console.WriteLine("Salary:");
+            decimal salary = decimal.Parse(Console.ReadLine());
+
+            Employee employee = typeChoice switch
+            {
+                "1" => CreateManager(name, department, salary),
+                "2" => CreateTester(name, department, salary),
+                _ => null
+            };
+
+            if(employee == null)
+            {
+                Console.WriteLine("Invalid Employee Type");
+                return;
+            }
+
+            _employeeService.AddEmployee(employee);
+            Console.WriteLine("Employee Added Sucess fully");
+        }
+
+        private Employee CreateManager(string name, string department, decimal salary)
+        {
+            Console.WriteLine("Enter TeamSize: ");
+            int teamSize = int.Parse(Console.ReadLine());
+            return new Manager(name, department, salary, teamSize);
+        }
+
+        private Employee CreateTester(string name, string department, decimal salary)
+        {
+            Console.WriteLine("TechStack: ");
+            string techStack = Console.ReadLine();
+            return new Tester(name, department, salary, techStack);
+        }
+
+        private void RemoveEmployeeFlow()
+        {
+            Console.WriteLine("Enter Employee ID: ");
+            int id = int.Parse(Console.ReadLine());
+
+            _employeeService.RemoveEmployee(id);
+            Console.WriteLine("Employee Removed Success");
+        }
+
+        private void ViewAllEmployees()
+        {
+            Console.WriteLine("\n---Employee List---");
+
+            foreach(var emp in _employeeService.GetAllEmployees())
+            {
+                Console.WriteLine(
+                    $"ID: {emp.Id}, Name: {emp.Name}, Department: {emp.Department}, Salary: {emp.Salary}");
+            }
+        }
+
+        private void UpdateSalaryFlow()
+        {
+            Console.Write("Enter Employee ID: ");
+            int id = int.Parse(Console.ReadLine());
+
+            Console.Write("Enter new Salary: ");
+            decimal salary = decimal.Parse(Console.ReadLine());
+
+            _employeeService.UpdateSalary(id, salary);
+            Console.WriteLine("Salary updation Success.");
         }
     }
 }
