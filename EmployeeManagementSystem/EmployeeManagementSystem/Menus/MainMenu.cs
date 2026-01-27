@@ -35,7 +35,7 @@ namespace EmployeeManagementSystem.Menus
                 switch (choice)
                 {
                     case "1":
-                        var hrMenu = new HRMenu(_employeeService);
+                        var hrMenu = new HRMenu(_employeeService, _requestService);
                         hrMenu.Show();
                         break;
 
