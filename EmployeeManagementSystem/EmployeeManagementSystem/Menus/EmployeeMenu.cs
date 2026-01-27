@@ -95,8 +95,9 @@ namespace EmployeeManagementSystem.Menus
         private void RaiseRequest(Employee employee)
         {
             Console.WriteLine("Enter Request Message: ");
-            string message = Console.ReadLine();
-            _requestService.AddRequest(employee.Id, message);
+            string desc = Console.ReadLine();
+            var request = new Request(employee.Id, _role, desc);
+            _requestService.CreateRequest(request);
             Console.WriteLine("Request Raised Successfully.");
         }
     }
