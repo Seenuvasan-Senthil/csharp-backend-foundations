@@ -3,20 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using EmployeeManagementSystem.Entities;
 using EmployeeManagementSystem.Services;
+using EmployeeManagementSystem.Enums;
 
 namespace EmployeeManagementSystem.Menus
 {
     internal class EmployeeMenu
     {
-        public enum Role
-        {
-            Manager,
-            Tester
-        }
 
         private readonly IEmployeeService _employeeService;
         private readonly RequestService _requestService;
-        //private readonly Role _role;
+        private readonly Role _role;
 
         public EmployeeMenu(IEmployeeService employeeService, RequestService requestService, Role role)
         {

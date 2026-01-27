@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using EmployeeManagementSystem.Enums;
 
 namespace EmployeeManagementSystem.Menus
 {
@@ -14,12 +15,6 @@ namespace EmployeeManagementSystem.Menus
         {
             _employeeService = employeeService;
             _requestService = requestService;
-        }
-
-        public enum Role
-        {
-            Manager,
-            Tester
         }
 
         public void show()
