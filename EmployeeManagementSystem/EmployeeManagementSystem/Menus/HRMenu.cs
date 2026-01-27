@@ -11,10 +11,12 @@ namespace EmployeeManagementSystem.Menus
     {
         private const int HR_SECRET_KEY = 10;
         private readonly IEmployeeService _employeeService;
+        private readonly RequestService _requestService;
 
-        public HRMenu(IEmployeeService employeeService)
+        public HRMenu(IEmployeeService employeeService, RequestService requestService)
         {
             _employeeService = employeeService;
+            _requestService = requestService;
         }
 
         public void Show()
@@ -34,6 +36,9 @@ namespace EmployeeManagementSystem.Menus
                 Console.WriteLine("2. Remove Employee");
                 Console.WriteLine("3. View All Employee");
                 Console.WriteLine("4. Update Salary");
+                Console.WriteLine("5. View Employee Requests");
+                Console.WriteLine("6. Approve Emplyee Request");
+                Console.WriteLine("7. Reject Employee Request");
                 Console.WriteLine("0. Logout");
                 Console.WriteLine("Choose Option: ");
 
@@ -55,6 +60,18 @@ namespace EmployeeManagementSystem.Menus
 
                     case "4":
                         UpdateSalaryFlow();
+                        break;
+
+                    case "5":
+                        DisplayAllRequests();
+                        break;
+
+                    case "6":
+                        ApproveRequest();
+                        break;
+
+                    case "7":
+                        RejectRequest();
                         break;
 
                     case "0":
@@ -155,6 +172,30 @@ namespace EmployeeManagementSystem.Menus
 
             _employeeService.UpdateSalary(id, salary);
             Console.WriteLine("Salary updation Success.");
+        }
+
+        private void DisplayAllRequests()
+        {
+            foreach(var r in _requestService.GetAllRequests())
+            {
+                Console.WriteLine(
+                    $"RequestID: {r.Id} | EmpId: {r.EmployeeId} | Role: {r.RequestedByRole} | Desc: {r.Description} |Status: {r.Status}"
+                    );
+            }
+        }
+
+        private void ApproveRequest()
+        {
+            Console.WriteLine("Enter Request ID: ");
+            _requestService.ApproveRequest(int.Parse(Console.ReadLine()!));
+            Console.WriteLine("Approved");
+        }
+
+        private void RejectRequest()
+        {
+            Console.WriteLine("Enter Request ID: ");
+            _requestService.RejectRequest(int.Parse(Console.ReadLine()!));
+            Console.WriteLine("Rejected");
         }
     }
 }
