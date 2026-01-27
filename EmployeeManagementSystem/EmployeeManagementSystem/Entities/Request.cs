@@ -15,7 +15,6 @@ namespace EmployeeManagementSystem.Entities
 
         public Request(int empId, Role role, string description)
         {
-            Id = empId;
             EmployeeId = empId;
             Description = description;
             Status = "Pending";
