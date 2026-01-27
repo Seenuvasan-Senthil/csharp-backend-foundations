@@ -8,9 +8,15 @@ namespace EmployeeManagementSystem.Menus
 {
     internal class EmployeeMenu
     {
+        public enum Role
+        {
+            Manager,
+            Tester
+        }
+
         private readonly IEmployeeService _employeeService;
         private readonly RequestService _requestService;
-        private readonly Role _role;
+        //private readonly Role _role;
 
         public EmployeeMenu(IEmployeeService employeeService, RequestService requestService, Role role)
         {
@@ -76,7 +82,7 @@ namespace EmployeeManagementSystem.Menus
             //role vadation part
             if (_role == Role.Manager && employee is not Manager) return null;
 
-            if (_role == _role.Tester && employee is not Tester) return null;
+            if (_role == Role.Tester && employee is not Tester) return null;
 
             return employee;
         }

@@ -1,0 +1,66 @@
+﻿using EmployeeManagementSystem.Services;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace EmployeeManagementSystem.Menus
+{
+    internal class MainMenu
+    {
+        private readonly IEmployeeService _employeeService;
+        private readonly RequestService _requestService;
+
+        public MainMenu(IEmployeeService employeeService, RequestService requestService)
+        {
+            _employeeService = employeeService;
+            _requestService = requestService;
+        }
+
+        public enum Role
+        {
+            Manager,
+            Tester
+        }
+
+        public void show()
+        {
+            bool exit = false;
+
+            while (!exit)
+            {
+                Console.WriteLine("\n###Employee Management System###");
+                Console.WriteLine("1. HR");
+                Console.WriteLine("2. Manager");
+                Console.WriteLine("3. Tester");
+                Console.WriteLine("0. Exit");
+
+                Console.WriteLine("Select your Role: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        var hrMenu = new HRMenu(_employeeService);
+                        hrMenu.Show();
+                        break;
+
+                    case "2":
+                        new EmployeeMenu(_employeeService, _requestService, Role.Manager).Show();
+                        break;
+
+                    case "3":
+                        new EmployeeMenu(_employeeService, _requestService, Role.Tester).Show();
+                        break;
+
+                    case "0":
+                        exit = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid Input. Please try Again.");
+                        break;
+                }
+            }
+        }
+    }
+}
