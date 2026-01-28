@@ -19,7 +19,7 @@ namespace EmployeeManagementSystem.Entities
         //polymorphism-manager may have 10% bonus on emp salary, so polymorphism applied here. 
         public override void UpdateSalary(decimal newSalary)
         {
-            decimal managerSalary = newSalary * 1.10m;
+            decimal managerSalary = newSalary + (newSalary * 1.10m);
             base.UpdateSalary(managerSalary);
         }
 
