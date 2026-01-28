@@ -110,7 +110,12 @@ namespace EmployeeManagementSystem.Menus
             string department = Console.ReadLine();
 
             Console.WriteLine("Salary:");
-            decimal salary = decimal.Parse(Console.ReadLine());
+            //we declare "salary" right inside the TryParse()
+            if (!decimal.TryParse(Console.ReadLine(), out decimal salary)) {
+                Console.WriteLine("Invalid argument type.");
+                return;
+            }
+
 
             Employee employee = typeChoice switch
             {
@@ -132,7 +137,11 @@ namespace EmployeeManagementSystem.Menus
         private Employee CreateManager(string name, string department, decimal salary)
         {
             Console.WriteLine("Enter TeamSize: ");
-            int teamSize = int.Parse(Console.ReadLine());
+            if(!int.TryParse(Console.ReadLine(), out int teamSize))
+            {
+                Console.WriteLine("Please enter a Valid number. Try Again.");
+            }
+            //int teamSize = int.Parse(Console.ReadLine());
             return new Manager(name, department, salary, teamSize);
         }
 
@@ -146,7 +155,11 @@ namespace EmployeeManagementSystem.Menus
         private void RemoveEmployeeFlow()
         {
             Console.WriteLine("Enter Employee ID: ");
-            int id = int.Parse(Console.ReadLine());
+            if(!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("ID Format Exception.");
+                return;
+            }
 
             _employeeService.RemoveEmployee(id);
             Console.WriteLine("Employee Removed Success");
@@ -166,10 +179,19 @@ namespace EmployeeManagementSystem.Menus
         private void UpdateSalaryFlow()
         {
             Console.Write("Enter Employee ID: ");
-            int id = int.Parse(Console.ReadLine());
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("ID Format Exception.");
+                return;
+            }
+            //int id = int.Parse(Console.ReadLine());
 
             Console.Write("Enter new Salary: ");
-            decimal salary = decimal.Parse(Console.ReadLine());
+            if(!decimal.TryParse(Console.ReadLine(), out decimal salary))
+            {
+                Console.WriteLine("Please enter a Valid Number.");
+                return;
+            }
 
             _employeeService.UpdateSalary(id, salary);
             Console.WriteLine("Salary updation Success.");
