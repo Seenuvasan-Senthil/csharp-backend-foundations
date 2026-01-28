@@ -11,7 +11,7 @@ namespace EmployeeManagementSystem
         {
             IEmployeeService employeeService = new EmployeeService();
             RequestService requestService = new RequestService();
-
+            //constructor dependency injection
             MainMenu mainMenu = new MainMenu(employeeService, requestService);
             mainMenu.show();
 
