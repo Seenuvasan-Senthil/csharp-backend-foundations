@@ -8,16 +8,18 @@ namespace EmployeeManagementSystem.Menus
 {
     internal class MainMenu
     {
+        //we will need these two services to our application run
         private readonly IEmployeeService _employeeService;
         private readonly RequestService _requestService;
 
-        public MainMenu(IEmployeeService employeeService, RequestService requestService)
+        //dependencies-MainMenu needs this services, receives it
+        public MainMenu(IEmployeeService employeeService, RequestService requestService) //initialize services
         {
             _employeeService = employeeService;
             _requestService = requestService;
         }
 
-        public void show()
+        public void show() //journey starts
         {
             bool exit = false;
 

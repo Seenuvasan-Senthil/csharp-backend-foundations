@@ -5,16 +5,18 @@ using EmployeeManagementSystem.Entities;
 
 namespace EmployeeManagementSystem.Services
 {
-    internal class RequestService
+    internal class RequestService //request can be raised by any employee
     {
         private readonly List<Request> _requests = new();
-        private int _nextId = 1;
+        private int _nextId = 1; //id is assigned only by this service
 
-        public void CreateRequest(Request request)
+        public void CreateRequest(Request request) //public constructor-anyone can initialize
         {
-            request.SetId(_nextId++);
+            request.SetId(_nextId++); //request object property
             _requests.Add(request);
         }
+
+        //helper methods 
 
         public List<Request> GetAllRequests()
         {
