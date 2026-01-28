@@ -90,6 +90,7 @@ namespace EmployeeManagementSystem.Menus
         private bool Authenticate()
         {
             Console.WriteLine("Enter Hr Secret Key: ");
+            Console.WriteLine("Please enter 10");
             return int.TryParse(Console.ReadLine(), out int key) && key == HR_SECRET_KEY; 
         }
 
