@@ -38,6 +38,7 @@ namespace EmployeeManagementSystem.Menus
                 Console.WriteLine($"\n---{_role} Menu---");
                 Console.WriteLine("1. View Profile.");
                 Console.WriteLine("2. Raise Request");
+                Console.WriteLine("3. ViewMyRequests");
                 Console.WriteLine("0. Logout");
                 Console.WriteLine("Choose Option: ");
 
@@ -51,6 +52,10 @@ namespace EmployeeManagementSystem.Menus
 
                     case "2":
                         RaiseRequest(employee);
+                        break;
+
+                    case "3":
+                        ViewMyRequests(employee);
                         break;
 
                     case "0":
@@ -99,6 +104,25 @@ namespace EmployeeManagementSystem.Menus
             var request = new Request(employee.Id, _role, desc);
             _requestService.CreateRequest(request);
             Console.WriteLine("Request Raised Successfully.");
+        }
+
+        private void ViewMyRequests(Employee employee)
+        {
+            //Filtering the list using LINQ
+            var reqs = _requestService.GetAllRequests().Where(r => r.Id == employee.Id);
+
+            if (!reqs.Any()) //checks if the list has any items
+            {
+                Console.WriteLine("You didnt Raised any Requests.");
+                return;
+            }
+
+            foreach(var request in reqs)
+            {
+                Console.WriteLine(
+                    $"ID: {request.EmployeeId}, Name: {employee.Name}, Desc: {request.Description}, Status: {request.Status}"
+                    );
+            }
         }
     }
 }
