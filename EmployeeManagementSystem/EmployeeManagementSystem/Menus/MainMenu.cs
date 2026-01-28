@@ -28,7 +28,8 @@ namespace EmployeeManagementSystem.Menus
                 Console.WriteLine("\n###Employee Management System###");
                 Console.WriteLine("1. HR");
                 Console.WriteLine("2. Manager");
-                Console.WriteLine("3. Tester");
+                Console.WriteLine("3. Developer");
+                Console.WriteLine("4. Tester");
                 Console.WriteLine("0. Exit");
 
                 Console.WriteLine("Select your Role: ");
@@ -46,6 +47,10 @@ namespace EmployeeManagementSystem.Menus
                         break;
 
                     case "3":
+                        new EmployeeMenu(_employeeService, _requestService, Role.Developer).Show();
+                        break;
+
+                    case "4":
                         new EmployeeMenu(_employeeService, _requestService, Role.Tester).Show();
                         break;
 

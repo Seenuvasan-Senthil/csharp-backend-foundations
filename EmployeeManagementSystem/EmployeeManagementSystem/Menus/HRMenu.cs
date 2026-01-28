@@ -99,6 +99,7 @@ namespace EmployeeManagementSystem.Menus
             Console.WriteLine("\nSelect Employee Type:");
             Console.WriteLine("1. Manager");
             Console.WriteLine("2. Tester");
+            Console.WriteLine("3. Developer");
             Console.WriteLine("Enter your Choice: ");
 
             string typeChoice = Console.ReadLine();
@@ -121,6 +122,7 @@ namespace EmployeeManagementSystem.Menus
             {
                 "1" => CreateManager(name, department, salary),
                 "2" => CreateTester(name, department, salary),
+                "3" => CreateDeveloper(name, department, salary),
                 _ => null
             };
 
@@ -134,7 +136,7 @@ namespace EmployeeManagementSystem.Menus
             Console.WriteLine("Employee Added Sucess fully");
         }
 
-        private Employee CreateManager(string name, string department, decimal salary)
+        private Employee CreateManager(string name, string department, decimal salary) //manager constructor called
         {
             Console.WriteLine("Enter TeamSize: ");
             if(!int.TryParse(Console.ReadLine(), out int teamSize))
@@ -145,11 +147,18 @@ namespace EmployeeManagementSystem.Menus
             return new Manager(name, department, salary, teamSize);
         }
 
-        private Employee CreateTester(string name, string department, decimal salary)
+        private Employee CreateTester(string name, string department, decimal salary) //tester constructor called
         {
             Console.WriteLine("TechStack: ");
             string techStack = Console.ReadLine();
             return new Tester(name, department, salary, techStack);
+        }
+
+        private Employee CreateDeveloper(string name, string department, decimal salary) //developer constructor called
+        {
+            Console.WriteLine("Area:");
+            string area = Console.ReadLine();
+            return new Developer(name, department, salary, area);
         }
 
         private void RemoveEmployeeFlow()

@@ -85,6 +85,8 @@ namespace EmployeeManagementSystem.Menus
 
             if (_role == Role.Tester && employee is not Tester) return null;
 
+            if (_role == Role.Developer && employee is not Developer) return null;
+
             return employee;
         }
 
@@ -93,6 +95,7 @@ namespace EmployeeManagementSystem.Menus
             Console.WriteLine("\n---My Profile---");
             Console.WriteLine($"ID: {employee.Id}");
             Console.WriteLine($"Name: {employee.Name}");
+            Console.WriteLine($"Role: {_role}");
             Console.WriteLine($"Department: {employee.Department}");
             Console.WriteLine($"Salary: {employee.Salary}");
         }
