@@ -57,5 +57,10 @@ namespace EmployeeManagementSystem.Services
             _employees.Remove(employee);
         }
 
+        public int GetTeamSize(int managerId)  //team size is now calculated using emp service dynamic
+        {
+            return _employees.Count(e => e.ManagerId == managerId);
+        }
+
     }
 }

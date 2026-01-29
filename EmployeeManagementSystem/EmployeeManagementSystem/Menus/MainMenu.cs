@@ -26,8 +26,8 @@ namespace EmployeeManagementSystem.Menus
             while (!exit)
             {
                 Console.WriteLine("\n###Employee Management System###");
-                Console.WriteLine("1. HR");
-                Console.WriteLine("2. Manager");
+                Console.WriteLine("1. Admin");
+                Console.WriteLine("2. Employee");
                 Console.WriteLine("3. Developer");
                 Console.WriteLine("4. Tester");
                 Console.WriteLine("0. Exit");
@@ -38,21 +38,20 @@ namespace EmployeeManagementSystem.Menus
                 switch (choice)
                 {
                     case "1":
-                        var hrMenu = new HRMenu(_employeeService, _requestService);
-                        hrMenu.Show();
+                        new AdminMenu(_employeeService).Show();
                         break;
 
                     case "2":
-                        new EmployeeMenu(_employeeService, _requestService, Role.Manager).Show();
+                        new EmployeeMenu(_employeeService).Show();
                         break;
 
-                    case "3":
-                        new EmployeeMenu(_employeeService, _requestService, Role.Developer).Show();
-                        break;
+                    //case "3":
+                    //    new EmployeeMenu(_employeeService, _requestService, Role.Developer).Show();
+                    //    break;
 
-                    case "4":
-                        new EmployeeMenu(_employeeService, _requestService, Role.Tester).Show();
-                        break;
+                    //case "4":
+                    //    new EmployeeMenu(_employeeService, _requestService, Role.Tester).Show();
+                    //    break;
 
                     case "0":
                         exit = true;

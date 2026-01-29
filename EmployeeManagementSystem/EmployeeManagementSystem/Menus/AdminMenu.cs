@@ -7,13 +7,13 @@ using System.Net.Security;
 
 namespace EmployeeManagementSystem.Menus
 {
-    internal class HRMenu
+    internal class AdminMenu
     {
         private const int HR_SECRET_KEY = 10;
         private readonly IEmployeeService _employeeService;
         private readonly RequestService _requestService;
 
-        public HRMenu(IEmployeeService employeeService, RequestService requestService)
+        public AdminMenu(IEmployeeService employeeService, RequestService requestService)
         {
             _employeeService = employeeService;
             _requestService = requestService;

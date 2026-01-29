@@ -15,7 +15,8 @@ namespace EmployeeManagementSystem.Roles
 
         public int GetTeamSize(int mangerId)
         {
-            return 0; //will connect to service later
+            return 0;
+            //return _employeeService.GetTeamSize(mangerId);
         }
     }
 }

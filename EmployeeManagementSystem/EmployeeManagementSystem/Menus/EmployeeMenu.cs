@@ -4,6 +4,7 @@ using System.Text;
 using EmployeeManagementSystem.Entities;
 using EmployeeManagementSystem.Services;
 using EmployeeManagementSystem.Enums;
+using EmployeeManagementSystem.Roles;
 
 namespace EmployeeManagementSystem.Menus
 {
@@ -35,6 +36,20 @@ namespace EmployeeManagementSystem.Menus
 
             while (!logout)
             {
+                if (employee.HasRole<IApprover>())
+                {
+                    Console.WriteLine("1. Approve Requests.");
+                }
+
+                if (employee.HasRole<ITeamSupervisor>())
+                {
+                    Console.WriteLine("2. View Team Size.");
+                }
+
+                if (employee.HasRole<ICodeContributor>())
+                {
+                    Console.WriteLine("3. Developer Options.");
+                }
                 Console.WriteLine($"\n---{_role} Menu---");
                 Console.WriteLine("1. View Profile.");
                 Console.WriteLine("2. Raise Request");
