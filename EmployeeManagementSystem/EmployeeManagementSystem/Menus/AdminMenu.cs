@@ -4,6 +4,7 @@ using EmployeeManagementSystem.Services;
 using EmployeeManagementSystem.Entities;
 using System;
 using System.Net.Security;
+using EmployeeManagementSystem.Roles;
 
 namespace EmployeeManagementSystem.Menus
 {
@@ -89,7 +90,7 @@ namespace EmployeeManagementSystem.Menus
 
         private bool Authenticate()
         {
-            Console.WriteLine("Enter Hr Secret Key: ");
+            Console.WriteLine("Enter Admin Secret Key: ");
             Console.WriteLine("Please enter 10");
             return int.TryParse(Console.ReadLine(), out int key) && key == HR_SECRET_KEY; 
         }
@@ -117,16 +118,64 @@ namespace EmployeeManagementSystem.Menus
                 return;
             }
 
+            Console.WriteLine("Enter Manager ID(or 0 if none): ");
+            int managerId = int.Parse(Console.ReadLine());
 
-            Employee employee = typeChoice switch
+            Employee employee = new PermanentEmployee(name, department, salary);
+
+            if(managerId != 0)
             {
-                "1" => CreateManager(name, department, salary),
-                "2" => CreateTester(name, department, salary),
-                "3" => CreateDeveloper(name, department, salary),
-                _ => null
-            };
+                employee.AssignManager(managerId);
+            }
 
-            if(employee == null)
+            //Employee employee1 = typeChoice switch
+            //{
+            //    "1" => CreateManager(name, department, salary),
+            //    "2" => CreateTester(name, department, salary),
+            //    "3" => CreateDeveloper(name, department, salary),
+            //    _ => null
+            //};
+
+            bool addingRoles = true;
+
+            while (addingRoles)
+            {
+                Console.WriteLine("\nAssign Role: ");
+                Console.WriteLine("1. Manager");
+                Console.WriteLine("2. Tester");
+                Console.WriteLine("3. Developer");
+                Console.WriteLine("0. Done");
+
+                string roleChoice = Console.ReadLine();
+
+                switch (roleChoice)
+                {
+                    case "1":
+                        employee.AssignRole(new ManagerRole());
+                        Console.WriteLine("Manager Role Assigned.");
+                        break;
+
+                    case "2":
+                        employee.AssignRole(new TesterRole());
+                        Console.WriteLine("Tester Role Assigned.");
+                        break;
+
+                    case "3":
+                        employee.AssignRole(new DeveloperRole());
+                        Console.WriteLine("Developer Role Assigned.");
+                        break;
+
+                    case "0":
+                        addingRoles = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid Role Choice.");
+                        break;
+                }
+            }
+
+            if (employee == null)
             {
                 Console.WriteLine("Invalid Employee Type");
                 return;

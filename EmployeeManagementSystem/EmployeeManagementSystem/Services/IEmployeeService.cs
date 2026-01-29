@@ -13,5 +13,7 @@ namespace EmployeeManagementSystem.Services
         List<Employee> GetAllEmployees();
         void UpdateSalary(int id, decimal newSalary);
         void RemoveEmployee(int id);
+
+        int GetTeamSize(int managerId);
     }
 }

@@ -33,54 +33,93 @@ namespace EmployeeManagementSystem.Menus
             }
 
             bool logout = false;
+            Console.WriteLine($"Welcome {employee.Name}.");
+            Console.WriteLine("Available Actions: ");
+
+            //int optionNumber = 1;
+
+            //var actions = new Dictionary<int, Action>();
 
             while (!logout)
             {
+                int optionNumber = 1;
+                var actions = new Dictionary<int, Action>();
                 if (employee.HasRole<IApprover>())
                 {
-                    Console.WriteLine("1. Approve Requests.");
+                    Console.WriteLine($"{optionNumber}. Approve Requests.");
+                    actions[optionNumber] = () =>
+                    {
+                        Console.WriteLine("Enter Request ID: ");
+                        int requestId = int.Parse(Console.ReadLine());
+
+                        var approver = employee.Roles.OfType<IApprover>().First();
+                        approver.Approve(requestId);
+                    };
+                    optionNumber++;
                 }
 
                 if (employee.HasRole<ITeamSupervisor>())
                 {
-                    Console.WriteLine("2. View Team Size.");
+                    Console.WriteLine($"{optionNumber}. View Team Size.");
+
+                    actions[optionNumber] = () =>
+                    {
+                        int teamSize = _employeeService.GetTeamSize(employee.Id);
+                        Console.WriteLine($"Your Team Size is: {teamSize}");
+                    };
+                    optionNumber++;
                 }
 
                 if (employee.HasRole<ICodeContributor>())
                 {
-                    Console.WriteLine("3. Developer Options.");
+                    Console.WriteLine($"{optionNumber}. View Developer Dashboard.");
+
+                    actions[optionNumber] = () => {
+                        Console.WriteLine("Developer tools Loading...");
+                    };
+                    optionNumber++;
                 }
-                Console.WriteLine($"\n---{_role} Menu---");
-                Console.WriteLine("1. View Profile.");
-                Console.WriteLine("2. Raise Request");
-                Console.WriteLine("3. ViewMyRequests");
-                Console.WriteLine("0. Logout");
+
+                //Console.WriteLine($"\n---{_role} Menu---");
+                //Console.WriteLine("1. View Profile.");
+                //Console.WriteLine("2. Raise Request");
+                //Console.WriteLine("3. ViewMyRequests");
+                //Console.WriteLine("0. Logout");
                 Console.WriteLine("Choose Option: ");
 
-                string choice = Console.ReadLine();
+                int choice = int.Parse(Console.ReadLine()!);
 
-                switch (choice)
+                if (actions.ContainsKey(choice))
                 {
-                    case "1":
-                        ShowProfile(employee);
-                        break;
-
-                    case "2":
-                        RaiseRequest(employee);
-                        break;
-
-                    case "3":
-                        ViewMyRequests(employee);
-                        break;
-
-                    case "0":
-                        logout = true;
-                        break;
-
-                    default:
-                        Console.WriteLine("Invalid Operation.");
-                        break;
+                    actions[choice].Invoke();
                 }
+                else
+                {
+                    Console.WriteLine("Invalid Choice.");
+                }
+
+                //switch (choice)
+                //{
+                //    case "1":
+                //        ShowProfile(employee);
+                //        break;
+
+                //    case "2":
+                //        RaiseRequest(employee);
+                //        break;
+
+                //    case "3":
+                //        ViewMyRequests(employee);
+                //        break;
+
+                //    case "0":
+                //        logout = true;
+                //        break;
+
+                //    default:
+                //        Console.WriteLine("Invalid Operation.");
+                //        break;
+                //}
             }
         }
 
@@ -96,11 +135,11 @@ namespace EmployeeManagementSystem.Menus
             if (employee == null) return null;
 
             //role vadation part
-            if (_role == Role.Manager && employee is not Manager) return null;
+            //if (_role == Role.Manager && employee is not Manager) return null;
 
-            if (_role == Role.Tester && employee is not Tester) return null;
+            //if (_role == Role.Tester && employee is not Tester) return null;
 
-            if (_role == Role.Developer && employee is not Developer) return null;
+            //if (_role == Role.Developer && employee is not Developer) return null;
 
             return employee;
         }

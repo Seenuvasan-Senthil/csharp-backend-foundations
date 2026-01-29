@@ -18,11 +18,12 @@ namespace EmployeeManagementSystem
             if (emp.HasRole<IApprover>())
             {
                 Console.WriteLine($"{emp.Name} can approve reqs");
-                return;
+                
             }
 
             IEmployeeService employeeService = new EmployeeService();
             RequestService requestService = new RequestService();
+            employeeService.AddEmployee(emp);
             //constructor dependency injection
             MainMenu mainMenu = new MainMenu(employeeService, requestService);
             mainMenu.show();
