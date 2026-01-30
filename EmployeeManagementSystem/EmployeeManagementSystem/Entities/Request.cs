@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using EmployeeManagementSystem.Enums;
 
 namespace EmployeeManagementSystem.Entities
 {
@@ -12,7 +11,6 @@ namespace EmployeeManagementSystem.Entities
         public string Description { get; }
         public bool IsApproved { get; private set; }
         public bool IsRejected { get; private set; }
-        public Role RequestedByRole { get; }
         public string Status { get; private set; }
 
 
@@ -38,15 +36,5 @@ namespace EmployeeManagementSystem.Entities
             IsRejected = true;
             Status = "Rejected";
         }
-
-        //internal void Approve()
-        //{
-        //    Status = "Approved";
-        //}
-
-        //internal void Reject()
-        //{
-        //    Status = "Rejected";
-        //}
     }
 }

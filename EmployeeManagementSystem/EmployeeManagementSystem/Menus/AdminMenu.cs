@@ -201,53 +201,5 @@ namespace EmployeeManagementSystem.Menus
             _employeeService.UpdateSalary(id, salary);
             Console.WriteLine("Salary updation Success.");
         }
-
-        private void DisplayAllRequests()
-        {
-            foreach(var r in _requestService.GetAllRequests())
-            {
-                Console.WriteLine(
-                    $"RequestID: {r.Id} | EmpId: {r.EmployeeId} | Role: {r.RequestedByRole} | Desc: {r.Description} |Status: {r.Status}"
-                    );
-            }
-        }
-
-        //private void ApproveRequest()
-        //{
-        //    int id = IsFound();
-        //    if(id != 0)
-        //    {
-        //        _requestService.ApproveRequest(id);
-        //        Console.WriteLine("Approved");
-        //    }
-        //}
-
-        //private void RejectRequest()
-        //{
-        //    int val = IsFound();
-        //    if (val != 0)
-        //    {
-        //        _requestService.RejectRequest(val);
-        //        Console.WriteLine("Rejected");
-        //    }
-        //}
-
-        //private int IsFound()
-        //{
-        //    Console.WriteLine("Enter Request ID: ");
-        //    if (!int.TryParse(Console.ReadLine(), out int id))
-        //    {
-        //        Console.WriteLine("NumberFormat Exception.");
-        //        return 0;
-        //    }
-        //    var req = _requestService.GetById(id);
-        //    if (req == null)
-        //    {
-        //        Console.WriteLine("no requests raised under this ID.");
-        //        return 0;
-        //    }
-
-        //    return id;
-        //}
     }
 }

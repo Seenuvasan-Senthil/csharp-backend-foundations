@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using EmployeeManagementSystem.Enums;
 
 namespace EmployeeManagementSystem.Menus
 {
@@ -28,8 +27,6 @@ namespace EmployeeManagementSystem.Menus
                 Console.WriteLine("\n###Employee Management System###");
                 Console.WriteLine("1. Admin");
                 Console.WriteLine("2. Employee");
-                //Console.WriteLine("3. Developer");
-                //Console.WriteLine("4. Tester");
                 Console.WriteLine("0. Exit");
 
                 Console.WriteLine("Select your Role: ");
@@ -44,14 +41,6 @@ namespace EmployeeManagementSystem.Menus
                     case "2":
                         new EmployeeMenu(_employeeService, _requestService).Show();
                         break;
-
-                    //case "3":
-                    //    new EmployeeMenu(_employeeService, _requestService, Role.Developer).Show();
-                    //    break;
-
-                    //case "4":
-                    //    new EmployeeMenu(_employeeService, _requestService, Role.Tester).Show();
-                    //    break;
 
                     case "0":
                         exit = true;
