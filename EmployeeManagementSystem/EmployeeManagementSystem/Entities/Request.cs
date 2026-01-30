@@ -28,9 +28,16 @@ namespace EmployeeManagementSystem.Entities
             Id = id;
         }
 
-        public void Approve() => IsApproved = true;
+        public void Approve() {
+            IsApproved = true;
+            Status = "Approved";
+        }
 
-        public void Reject() => IsRejected = true;
+        public void Reject()
+        {
+            IsRejected = true;
+            Status = "Rejected";
+        }
 
         //internal void Approve()
         //{

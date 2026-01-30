@@ -10,7 +10,7 @@ namespace EmployeeManagementSystem.Menus
 {
     internal class AdminMenu
     {
-        private const int HR_SECRET_KEY = 10;
+        private const int ADMIN_SECRET_KEY = 10;
         private readonly IEmployeeService _employeeService;
         private readonly RequestService _requestService;
 
@@ -37,9 +37,6 @@ namespace EmployeeManagementSystem.Menus
                 Console.WriteLine("2. Remove Employee");
                 Console.WriteLine("3. View All Employee");
                 Console.WriteLine("4. Update Salary");
-                Console.WriteLine("5. View Employee Requests");
-                Console.WriteLine("6. Approve Emplyee Request");
-                Console.WriteLine("7. Reject Employee Request");
                 Console.WriteLine("0. Logout");
                 Console.WriteLine("Choose Option: ");
 
@@ -63,18 +60,6 @@ namespace EmployeeManagementSystem.Menus
                         UpdateSalaryFlow();
                         break;
 
-                    case "5":
-                        DisplayAllRequests();
-                        break;
-
-                    //case "6":
-                    //    ApproveRequest();
-                    //    break;
-
-                    //case "7":
-                    //    RejectRequest();
-                    //    break;
-
                     case "0":
                         logout = true;
                         break;
@@ -86,25 +71,17 @@ namespace EmployeeManagementSystem.Menus
             }
         }
 
-        //private helpers, private-only to HR
+        //private helpers, private-only to Admin
 
         private bool Authenticate()
         {
             Console.WriteLine("Enter Admin Secret Key: ");
             Console.WriteLine("Please enter 10");
-            return int.TryParse(Console.ReadLine(), out int key) && key == HR_SECRET_KEY; 
+            return int.TryParse(Console.ReadLine(), out int key) && key == ADMIN_SECRET_KEY; 
         }
 
         private void AddEmployeeFlow()
         {
-            //Console.WriteLine("\nSelect Employee Type:");
-            //Console.WriteLine("1. Manager");
-            //Console.WriteLine("2. Tester");
-            //Console.WriteLine("3. Developer");
-            //Console.WriteLine("Enter your Choice: ");
-
-            //string typeChoice = Console.ReadLine();
-
             Console.WriteLine("Name:");
             string name = Console.ReadLine();
 
@@ -130,14 +107,6 @@ namespace EmployeeManagementSystem.Menus
                 string manName = man.Name;
                 Console.WriteLine($"Your Reporting Manager is :{manName}");
             }
-
-            //Employee employee1 = typeChoice switch
-            //{
-            //    "1" => CreateManager(name, department, salary),
-            //    "2" => CreateTester(name, department, salary),
-            //    "3" => CreateDeveloper(name, department, salary),
-            //    _ => null
-            //};
 
             bool addingRoles = true;
 
@@ -186,31 +155,6 @@ namespace EmployeeManagementSystem.Menus
 
             _employeeService.AddEmployee(employee);
             Console.WriteLine("Employee Added Sucess fully");
-        }
-
-        private Employee CreateManager(string name, string department, decimal salary) //manager constructor called
-        {
-            Console.WriteLine("Enter TeamSize: ");
-            if(!int.TryParse(Console.ReadLine(), out int teamSize))
-            {
-                Console.WriteLine("Please enter a Valid number. Try Again.");
-            }
-            //int teamSize = int.Parse(Console.ReadLine());
-            return new Manager(name, department, salary, teamSize);
-        }
-
-        private Employee CreateTester(string name, string department, decimal salary) //tester constructor called
-        {
-            Console.WriteLine("TechStack: ");
-            string techStack = Console.ReadLine();
-            return new Tester(name, department, salary, techStack);
-        }
-
-        private Employee CreateDeveloper(string name, string department, decimal salary) //developer constructor called
-        {
-            Console.WriteLine("Area:");
-            string area = Console.ReadLine();
-            return new Developer(name, department, salary, area);
         }
 
         private void RemoveEmployeeFlow()

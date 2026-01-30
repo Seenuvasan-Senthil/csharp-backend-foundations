@@ -14,7 +14,7 @@ namespace EmployeeManagementSystem.Menus
 
         private readonly IEmployeeService _employeeService;
         private readonly RequestService _requestService;
-        //private readonly Role _role;
+        private readonly List<string> _capabilities = new List<string>();
 
         public EmployeeMenu(IEmployeeService employeeService, RequestService requestService)
         {
@@ -44,47 +44,69 @@ namespace EmployeeManagementSystem.Menus
             {
                 int optionNumber = 1;
                 var actions = new Dictionary<int, Action>();
+
+                Console.WriteLine($"{optionNumber}. My Profile.");
+                actions[optionNumber] = () => {
+                    ShowProfile(employee);
+                };
+                optionNumber++;
+
                 if (employee.HasRole<IApprover>())
                 {
-                    Console.WriteLine($"{optionNumber}. Approve Requests.");
+                    _capabilities.Add("CanApproveRequests");
+                    Console.WriteLine($"{optionNumber}. View Requests.");
                     actions[optionNumber] = () =>
                     {
-                        Console.WriteLine("Enter Request ID: ");
-                        int requestId = int.Parse(Console.ReadLine());
+                        _requestService.DisplayRequests();
+                    };
+                    optionNumber++;
+                }
 
-                        _requestService.ApproveRequest(requestId, employee);
-
-                        //var approver = employee.Roles.OfType<IApprover>().First();
-                        //approver.Approve(requestId);
+                if (employee.HasRole<IApprover>())
+                {
+                    Console.WriteLine($"{optionNumber}. Approve/Reject Requests.");
+                    actions[optionNumber] = () =>
+                    {
+                        ReqApproveOrReject(employee);
                     };
                     optionNumber++;
                 }
 
                 if (employee.HasRole<ITeamSupervisor>())
                 {
+                    _capabilities.Add("TeamSupervisor");
                     Console.WriteLine($"{optionNumber}. View Team Size.");
 
                     actions[optionNumber] = () =>
                     {
-                        int teamSize = _employeeService.GetTeamSize(employee.Id);
-                        Console.WriteLine($"Your Team Size is: {teamSize}");
+                        DisplayTeamSize(employee);
                     };
                     optionNumber++;
                 }
 
                 if (employee.HasRole<ICodeContributor>())
                 {
+                    _capabilities.Add("Developer");
                     Console.WriteLine($"{optionNumber}. Raise Request.");
 
                     actions[optionNumber] = () => {
-                        Console.WriteLine("Enter Request Message: ");
-                        string desc = Console.ReadLine();
-                        Request request = new Request(employee.Id, desc);
-                        _requestService.CreateRequest(request);
-                        Console.WriteLine("Request Raised Successfully.");
+                        RaiseRequest(employee);
                     };
                     optionNumber++;
                 }
+
+                if (employee.HasRole<ICodeContributor>())
+                {
+                    Console.WriteLine($"{optionNumber}. View My Requests.");
+
+                    actions[optionNumber] = () =>
+                    {
+                        ViewMyRequests(employee);
+                    };
+                    optionNumber++;
+                }
+
+                Console.WriteLine("0. LogOut");
 
                 Console.WriteLine("Choose Option: ");
 
@@ -96,36 +118,13 @@ namespace EmployeeManagementSystem.Menus
                 }
                 else if(choice == 0)
                 {
-                    Console.WriteLine("Lgging you Off...");
+                    Console.WriteLine("Lgging you Off...Done");
                     break;
                 }
                 else
                 {
                     Console.WriteLine("Invalid Option.");
                 }
-
-                //switch (choice)
-                //{
-                //    case "1":
-                //        ShowProfile(employee);
-                //        break;
-
-                //    case "2":
-                //        RaiseRequest(employee);
-                //        break;
-
-                //    case "3":
-                //        ViewMyRequests(employee);
-                //        break;
-
-                //    case "0":
-                //        logout = true;
-                //        break;
-
-                //    default:
-                //        Console.WriteLine("Invalid Operation.");
-                //        break;
-                //}
             }
         }
 
@@ -155,24 +154,24 @@ namespace EmployeeManagementSystem.Menus
             Console.WriteLine("\n---My Profile---");
             Console.WriteLine($"ID: {employee.Id}");
             Console.WriteLine($"Name: {employee.Name}");
-            //Console.WriteLine($"Role: {_role}");
+            Console.WriteLine($"Capabilities: {string.Join("," , _capabilities)}");
             Console.WriteLine($"Department: {employee.Department}");
             Console.WriteLine($"Salary: {employee.Salary}");
         }
 
-        //private void RaiseRequest(Employee employee)
-        //{
-        //    Console.WriteLine("Enter Request Message: ");
-        //    string desc = Console.ReadLine();
-        //    var request = new Request(employee.Id, _role, desc);
-        //    _requestService.CreateRequest(request);
-        //    Console.WriteLine("Request Raised Successfully.");
-        //}
+        private void RaiseRequest(Employee employee)
+        {
+            Console.WriteLine("Enter Request Message: ");
+            string desc = Console.ReadLine();
+            Request request = new Request(employee.Id, desc);
+            _requestService.CreateRequest(request);
+            Console.WriteLine("Request Raised Successfully.");
+        }
 
         private void ViewMyRequests(Employee employee)
         {
             //Filtering the list using LINQ
-            var reqs = _requestService.GetAllRequests().Where(r => r.Id == employee.Id);
+            var reqs = _requestService.GetAllRequests().Where(r => r.EmployeeId == employee.Id);
 
             if (!reqs.Any()) //checks if the list has any items
             {
@@ -186,6 +185,33 @@ namespace EmployeeManagementSystem.Menus
                     $"ID: {request.EmployeeId}, Name: {employee.Name}, Desc: {request.Description}, Status: {request.Status}"
                     );
             }
+        }
+
+        private void ReqApproveOrReject(Employee employee)
+        {
+
+            Console.WriteLine("Enter Request ID: ");
+            int requestId = int.Parse(Console.ReadLine());
+            Console.WriteLine("1. Approve");
+            Console.WriteLine("2. Reject");
+            Console.WriteLine("Enter your Choice: ");
+            string choice = Console.ReadLine();
+            switch (choice)
+            {
+                case "1":
+                    _requestService.ApproveRequest(requestId, employee);
+                    break;
+
+                case "2":
+                    _requestService.RejectRequest(requestId, employee);
+                    break;
+            }
+        }
+
+        private void DisplayTeamSize(Employee employee)
+        {
+            int teamSize = _employeeService.GetTeamSize(employee.Id);
+            Console.WriteLine($"Your Team Size is: {teamSize}");
         }
     }
 }

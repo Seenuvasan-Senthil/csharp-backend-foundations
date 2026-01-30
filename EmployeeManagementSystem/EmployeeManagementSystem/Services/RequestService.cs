@@ -24,6 +24,13 @@ namespace EmployeeManagementSystem.Services
             return _requests;
         }
 
+        public void DisplayRequests()
+        {
+            _requests.ForEach(request => {
+                Console.WriteLine($"ReqID: {request.Id}, EmpID: {request.EmployeeId}, Desc: {request.Description}, Status: {request.Status}");
+            });
+        }
+
         public Request? GetRequestById(int id)
         {
             return _requests.FirstOrDefault(r => r.Id == id);
@@ -34,9 +41,16 @@ namespace EmployeeManagementSystem.Services
             if (!approver.HasRole<IApprover>())
             {
                 Console.WriteLine("You are not authorized to Approve");
+                return;
             }
             Request request = GetRequestById(requestId);
-            request?.Approve();
+            if(request == null)
+            {
+                Console.WriteLine("No Requests was/were raised under this ID");
+                return;
+            }
+            request.Approve();
+            Console.WriteLine($"{requestId} is Approved.");
         }
 
         public void RejectRequest(int requestId, Employee approver)
@@ -44,9 +58,16 @@ namespace EmployeeManagementSystem.Services
             if (!approver.HasRole<IApprover>())
             {
                 Console.WriteLine("You are not authorized to Reject.");
+                return;
             }
             Request request = GetRequestById(requestId);
-            request?.Reject();
+            if (request == null)
+            {
+                Console.WriteLine("No Requests was/were raised under this ID");
+                return;
+            }
+            request.Reject();
+            Console.WriteLine($"{requestId} is Rejected.");
         }
     }
 }
