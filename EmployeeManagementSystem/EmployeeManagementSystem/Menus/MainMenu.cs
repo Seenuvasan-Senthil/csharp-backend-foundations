@@ -42,7 +42,7 @@ namespace EmployeeManagementSystem.Menus
                         break;
 
                     case "2":
-                        new EmployeeMenu(_employeeService, _requestService, Role.Developer).Show();
+                        new EmployeeMenu(_employeeService, _requestService).Show();
                         break;
 
                     //case "3":

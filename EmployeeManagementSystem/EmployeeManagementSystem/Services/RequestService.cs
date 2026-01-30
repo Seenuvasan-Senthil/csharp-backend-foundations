@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using EmployeeManagementSystem.Entities;
+using EmployeeManagementSystem.Roles;
 
 namespace EmployeeManagementSystem.Services
 {
@@ -23,21 +24,29 @@ namespace EmployeeManagementSystem.Services
             return _requests;
         }
 
-        public Request? GetById(int id)
+        public Request? GetRequestById(int id)
         {
             return _requests.FirstOrDefault(r => r.Id == id);
         }
 
-        public void ApproveRequest(int id)
+        public void ApproveRequest(int requestId, Employee approver)
         {
-            var request = GetById(id);
+            if (!approver.HasRole<IApprover>())
+            {
+                Console.WriteLine("You are not authorized to Approve");
+            }
+            Request request = GetRequestById(requestId);
             request?.Approve();
         }
 
-        public void RejectRequest(int id)
+        public void RejectRequest(int requestId, Employee approver)
         {
-            var request = GetById(id);
-            request?.Rejecte();
+            if (!approver.HasRole<IApprover>())
+            {
+                Console.WriteLine("You are not authorized to Reject.");
+            }
+            Request request = GetRequestById(requestId);
+            request?.Reject();
         }
     }
 }

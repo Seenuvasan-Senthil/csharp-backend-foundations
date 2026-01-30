@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EmployeeManagementSystem.Entities;
-using EmployeeManagementSystem.Services;
+﻿using EmployeeManagementSystem.Entities;
 using EmployeeManagementSystem.Enums;
 using EmployeeManagementSystem.Roles;
+using EmployeeManagementSystem.Services;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Text;
 
 namespace EmployeeManagementSystem.Menus
 {
@@ -13,13 +14,12 @@ namespace EmployeeManagementSystem.Menus
 
         private readonly IEmployeeService _employeeService;
         private readonly RequestService _requestService;
-        private readonly Role _role;
+        //private readonly Role _role;
 
-        public EmployeeMenu(IEmployeeService employeeService, RequestService requestService, Role role)
+        public EmployeeMenu(IEmployeeService employeeService, RequestService requestService)
         {
             _employeeService = employeeService;
             _requestService = requestService;
-            _role = role;
         }
 
         public void Show()
@@ -52,8 +52,10 @@ namespace EmployeeManagementSystem.Menus
                         Console.WriteLine("Enter Request ID: ");
                         int requestId = int.Parse(Console.ReadLine());
 
-                        var approver = employee.Roles.OfType<IApprover>().First();
-                        approver.Approve(requestId);
+                        _requestService.ApproveRequest(requestId, employee);
+
+                        //var approver = employee.Roles.OfType<IApprover>().First();
+                        //approver.Approve(requestId);
                     };
                     optionNumber++;
                 }
@@ -72,19 +74,18 @@ namespace EmployeeManagementSystem.Menus
 
                 if (employee.HasRole<ICodeContributor>())
                 {
-                    Console.WriteLine($"{optionNumber}. View Developer Dashboard.");
+                    Console.WriteLine($"{optionNumber}. Raise Request.");
 
                     actions[optionNumber] = () => {
-                        Console.WriteLine("Developer tools Loading...");
+                        Console.WriteLine("Enter Request Message: ");
+                        string desc = Console.ReadLine();
+                        Request request = new Request(employee.Id, desc);
+                        _requestService.CreateRequest(request);
+                        Console.WriteLine("Request Raised Successfully.");
                     };
                     optionNumber++;
                 }
 
-                //Console.WriteLine($"\n---{_role} Menu---");
-                //Console.WriteLine("1. View Profile.");
-                //Console.WriteLine("2. Raise Request");
-                //Console.WriteLine("3. ViewMyRequests");
-                //Console.WriteLine("0. Logout");
                 Console.WriteLine("Choose Option: ");
 
                 int choice = int.Parse(Console.ReadLine()!);
@@ -93,9 +94,14 @@ namespace EmployeeManagementSystem.Menus
                 {
                     actions[choice].Invoke();
                 }
+                else if(choice == 0)
+                {
+                    Console.WriteLine("Lgging you Off...");
+                    break;
+                }
                 else
                 {
-                    Console.WriteLine("Invalid Choice.");
+                    Console.WriteLine("Invalid Option.");
                 }
 
                 //switch (choice)
@@ -149,19 +155,19 @@ namespace EmployeeManagementSystem.Menus
             Console.WriteLine("\n---My Profile---");
             Console.WriteLine($"ID: {employee.Id}");
             Console.WriteLine($"Name: {employee.Name}");
-            Console.WriteLine($"Role: {_role}");
+            //Console.WriteLine($"Role: {_role}");
             Console.WriteLine($"Department: {employee.Department}");
             Console.WriteLine($"Salary: {employee.Salary}");
         }
 
-        private void RaiseRequest(Employee employee)
-        {
-            Console.WriteLine("Enter Request Message: ");
-            string desc = Console.ReadLine();
-            var request = new Request(employee.Id, _role, desc);
-            _requestService.CreateRequest(request);
-            Console.WriteLine("Request Raised Successfully.");
-        }
+        //private void RaiseRequest(Employee employee)
+        //{
+        //    Console.WriteLine("Enter Request Message: ");
+        //    string desc = Console.ReadLine();
+        //    var request = new Request(employee.Id, _role, desc);
+        //    _requestService.CreateRequest(request);
+        //    Console.WriteLine("Request Raised Successfully.");
+        //}
 
         private void ViewMyRequests(Employee employee)
         {

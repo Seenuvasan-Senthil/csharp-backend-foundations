@@ -32,7 +32,7 @@ namespace EmployeeManagementSystem.Menus
 
             while (!logout)
             {
-                Console.WriteLine("\n---HR Menu---");
+                Console.WriteLine("\n---Admin Menu---");
                 Console.WriteLine("1. Add Employee");
                 Console.WriteLine("2. Remove Employee");
                 Console.WriteLine("3. View All Employee");
@@ -67,13 +67,13 @@ namespace EmployeeManagementSystem.Menus
                         DisplayAllRequests();
                         break;
 
-                    case "6":
-                        ApproveRequest();
-                        break;
+                    //case "6":
+                    //    ApproveRequest();
+                    //    break;
 
-                    case "7":
-                        RejectRequest();
-                        break;
+                    //case "7":
+                    //    RejectRequest();
+                    //    break;
 
                     case "0":
                         logout = true;
@@ -97,13 +97,13 @@ namespace EmployeeManagementSystem.Menus
 
         private void AddEmployeeFlow()
         {
-            Console.WriteLine("\nSelect Employee Type:");
-            Console.WriteLine("1. Manager");
-            Console.WriteLine("2. Tester");
-            Console.WriteLine("3. Developer");
-            Console.WriteLine("Enter your Choice: ");
+            //Console.WriteLine("\nSelect Employee Type:");
+            //Console.WriteLine("1. Manager");
+            //Console.WriteLine("2. Tester");
+            //Console.WriteLine("3. Developer");
+            //Console.WriteLine("Enter your Choice: ");
 
-            string typeChoice = Console.ReadLine();
+            //string typeChoice = Console.ReadLine();
 
             Console.WriteLine("Name:");
             string name = Console.ReadLine();
@@ -126,6 +126,9 @@ namespace EmployeeManagementSystem.Menus
             if(managerId != 0)
             {
                 employee.AssignManager(managerId);
+                var man = _employeeService.GetEmployeeById(managerId);
+                string manName = man.Name;
+                Console.WriteLine($"Your Reporting Manager is :{manName}");
             }
 
             //Employee employee1 = typeChoice switch
@@ -265,42 +268,42 @@ namespace EmployeeManagementSystem.Menus
             }
         }
 
-        private void ApproveRequest()
-        {
-            int id = IsFound();
-            if(id != 0)
-            {
-                _requestService.ApproveRequest(id);
-                Console.WriteLine("Approved");
-            }
-        }
+        //private void ApproveRequest()
+        //{
+        //    int id = IsFound();
+        //    if(id != 0)
+        //    {
+        //        _requestService.ApproveRequest(id);
+        //        Console.WriteLine("Approved");
+        //    }
+        //}
 
-        private void RejectRequest()
-        {
-            int val = IsFound();
-            if (val != 0)
-            {
-                _requestService.RejectRequest(val);
-                Console.WriteLine("Rejected");
-            }
-        }
+        //private void RejectRequest()
+        //{
+        //    int val = IsFound();
+        //    if (val != 0)
+        //    {
+        //        _requestService.RejectRequest(val);
+        //        Console.WriteLine("Rejected");
+        //    }
+        //}
 
-        private int IsFound()
-        {
-            Console.WriteLine("Enter Request ID: ");
-            if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("NumberFormat Exception.");
-                return 0;
-            }
-            var req = _requestService.GetById(id);
-            if (req == null)
-            {
-                Console.WriteLine("no requests raised under this ID.");
-                return 0;
-            }
+        //private int IsFound()
+        //{
+        //    Console.WriteLine("Enter Request ID: ");
+        //    if (!int.TryParse(Console.ReadLine(), out int id))
+        //    {
+        //        Console.WriteLine("NumberFormat Exception.");
+        //        return 0;
+        //    }
+        //    var req = _requestService.GetById(id);
+        //    if (req == null)
+        //    {
+        //        Console.WriteLine("no requests raised under this ID.");
+        //        return 0;
+        //    }
 
-            return id;
-        }
+        //    return id;
+        //}
     }
 }
