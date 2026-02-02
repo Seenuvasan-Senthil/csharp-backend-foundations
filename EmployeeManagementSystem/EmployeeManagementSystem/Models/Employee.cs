@@ -28,6 +28,8 @@ namespace EmployeeManagementSystem.Entities
         {
             if (!_roles.Any(r => r.GetType() == role.GetType()))
                 _roles.Add(role);
+            else
+                Console.WriteLine("Role is already assigned");
         }
 
         public bool HasRole<T>() where T : IRole
