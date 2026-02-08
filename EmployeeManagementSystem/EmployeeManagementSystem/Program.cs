@@ -2,6 +2,7 @@
 using EmployeeManagementSystem.Services;
 using EmployeeManagementSystem.Menus;
 using System;
+using EmployeeManagementSystem.Roles;
 
 namespace EmployeeManagementSystem
 {
@@ -11,7 +12,8 @@ namespace EmployeeManagementSystem
         {
             IEmployeeService employeeService = new EmployeeService();
             RequestService requestService = new RequestService();
-
+         
+            //constructor dependency injection
             MainMenu mainMenu = new MainMenu(employeeService, requestService);
             mainMenu.show();
 

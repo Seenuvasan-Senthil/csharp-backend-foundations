@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using EmployeeManagementSystem.Enums;
 
 namespace EmployeeManagementSystem.Entities
 {
@@ -9,11 +8,13 @@ namespace EmployeeManagementSystem.Entities
     {
         public int Id { get; private set; }
         public int EmployeeId { get; }
-        public Role RequestedByRole { get; }
         public string Description { get; }
+        public bool IsApproved { get; private set; }
+        public bool IsRejected { get; private set; }
         public string Status { get; private set; }
 
-        public Request(int empId, Role role, string description)
+
+        public Request(int empId, string description)
         {
             EmployeeId = empId;
             Description = description;
@@ -25,13 +26,14 @@ namespace EmployeeManagementSystem.Entities
             Id = id;
         }
 
-        internal void Approve()
-        {
+        public void Approve() {
+            IsApproved = true;
             Status = "Approved";
         }
 
-        internal void Rejecte()
+        public void Reject()
         {
+            IsRejected = true;
             Status = "Rejected";
         }
     }

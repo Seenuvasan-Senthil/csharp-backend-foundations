@@ -2,31 +2,31 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using EmployeeManagementSystem.Enums;
 
 namespace EmployeeManagementSystem.Menus
 {
     internal class MainMenu
     {
+        //we will need these two services to our application run
         private readonly IEmployeeService _employeeService;
         private readonly RequestService _requestService;
 
-        public MainMenu(IEmployeeService employeeService, RequestService requestService)
+        //dependencies-MainMenu needs this services, receives it
+        public MainMenu(IEmployeeService employeeService, RequestService requestService) //initialize services
         {
             _employeeService = employeeService;
             _requestService = requestService;
         }
 
-        public void show()
+        public void show() //journey starts
         {
             bool exit = false;
 
             while (!exit)
             {
                 Console.WriteLine("\n###Employee Management System###");
-                Console.WriteLine("1. HR");
-                Console.WriteLine("2. Manager");
-                Console.WriteLine("3. Tester");
+                Console.WriteLine("1. Admin");
+                Console.WriteLine("2. Employee");
                 Console.WriteLine("0. Exit");
 
                 Console.WriteLine("Select your Role: ");
@@ -35,16 +35,11 @@ namespace EmployeeManagementSystem.Menus
                 switch (choice)
                 {
                     case "1":
-                        var hrMenu = new HRMenu(_employeeService, _requestService);
-                        hrMenu.Show();
+                        new AdminMenu(_employeeService, _requestService).Show();
                         break;
 
                     case "2":
-                        new EmployeeMenu(_employeeService, _requestService, Role.Manager).Show();
-                        break;
-
-                    case "3":
-                        new EmployeeMenu(_employeeService, _requestService, Role.Tester).Show();
+                        new EmployeeMenu(_employeeService, _requestService).Show();
                         break;
 
                     case "0":

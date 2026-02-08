@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using EmployeeManagementSystem.Roles;
+using System.Linq;
 
 namespace EmployeeManagementSystem.Entities
 {
@@ -11,6 +13,29 @@ namespace EmployeeManagementSystem.Entities
         private string _name;
         private string _department;
         private decimal _salary;  //private->prevents uncontrolled modification
+        private readonly List<IRole> _roles = new();
+
+        public int? ManagerId { get; private set; }
+
+        public void AssignManager(int managerId)
+        {
+            ManagerId = managerId;
+        }
+
+        public IReadOnlyList<IRole> Roles => _roles;
+
+        public void AssignRole(IRole role)
+        {
+            if (!_roles.Any(r => r.GetType() == role.GetType()))
+                _roles.Add(role);
+            else
+                Console.WriteLine("Role is already assigned");
+        }
+
+        public bool HasRole<T>() where T : IRole
+        {
+            return _roles.Any(r => r is T);
+        }
 
         //properties(controlled access)
         public int Id { get; private set; }
