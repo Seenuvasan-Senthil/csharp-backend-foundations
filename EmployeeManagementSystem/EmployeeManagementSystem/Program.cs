@@ -10,20 +10,9 @@ namespace EmployeeManagementSystem
     {
         static void Main(string[] args)
         {
-            //Employee emp = new PermanentEmployee("venkat", "strata", 50000);
-
-            //emp.AssignRole(new ManagerRole());
-            //emp.AssignRole(new DeveloperRole());
-
-            //if (emp.HasRole<IApprover>())
-            //{
-            //    Console.WriteLine($"{emp.Name} can approve reqs");
-                
-            //}
-
             IEmployeeService employeeService = new EmployeeService();
             RequestService requestService = new RequestService();
-            //employeeService.AddEmployee(emp);
+         
             //constructor dependency injection
             MainMenu mainMenu = new MainMenu(employeeService, requestService);
             mainMenu.show();
