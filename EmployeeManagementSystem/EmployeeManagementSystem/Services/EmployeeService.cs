@@ -1,8 +1,10 @@
-﻿using System;
-using System.Text;
+﻿using EmployeeManagementSystem.Data;
 using EmployeeManagementSystem.Entities;
+using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 //EmployeeService.cs->Implementation
 namespace EmployeeManagementSystem.Services
@@ -23,10 +25,33 @@ namespace EmployeeManagementSystem.Services
         public void AddEmployee(Employee employee)  //we can pass developer, sre., etc - polymorphism used here
         {
             if (employee == null) throw new ArgumentNullException(nameof(employee));
-            employee.SetId(_nextId);
+            //employee.SetId(_nextId);
             _nextId++;
 
             _employees.Add(employee);
+            Console.WriteLine("entering db: ");
+            using var connection = DatabaseHelper.GetConnection();
+            try
+            {
+                connection.Open();
+                string query = @"
+                    INSERT INTO EMPLOYEES(Name, Department, Salary, ManagerId)
+                    VALUES(@Name, @Department, @Salary, @ManagerId);
+                    SELECT SCOPE_IDENTITY();
+                    ";
+
+                using var command = new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@Name", employee.Name);
+                command.Parameters.AddWithValue("@Department", employee.Department);
+                command.Parameters.AddWithValue("@Salary", employee.Salary);
+                command.Parameters.AddWithValue("@ManagerId", (object?)employee.ManagerId ?? DBNull.Value);
+            }
+            catch
+            {
+                Console.WriteLine("error in connecting.");
+            }
+
         }
 
         public Employee GetEmployeeById(int id)
