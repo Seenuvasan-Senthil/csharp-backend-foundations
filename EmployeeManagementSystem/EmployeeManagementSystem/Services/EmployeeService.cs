@@ -3,6 +3,7 @@ using EmployeeManagementSystem.Entities;
 using EmployeeManagementSystem.Services;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using EmployeeManagementSystem.Factories;
 
 public class EmployeeService : IEmployeeService
 {
@@ -27,31 +28,76 @@ public class EmployeeService : IEmployeeService
         Console.WriteLine($"Employee saved to DB with ID: {newId}");
     }
 
-    public Employee? GetEmployeeById(int id)
+    public Employee GetEmployeeById(int id)
+    {
+        Employee employee = null;
+
+        using var connection = DatabaseHelper.GetConnection();
+        connection.Open();
+
+        // Get Employee
+        using (var command = new SqlCommand("sp_GetEmployeeById", connection))
+        {
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@Id", id);
+
+            using var reader = command.ExecuteReader();
+
+            if (reader.Read())
+            {
+                employee = new PermanentEmployee(
+                    reader["Name"].ToString(),
+                    reader["Department"].ToString(),
+                    Convert.ToDecimal(reader["Salary"])
+                );
+
+                employee.SetId(Convert.ToInt32(reader["Id"]));
+
+                if (reader["ManagerId"] != DBNull.Value)
+                    employee.AssignManager(Convert.ToInt32(reader["ManagerId"]));
+            }
+        }
+
+        if (employee == null)
+            return null;
+
+        // Load Roles
+        using (var command = new SqlCommand("sp_GetRolesByEmployeeId", connection))
+        {
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@EmployeeId", id);
+
+            using var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var roleName = reader["CapabilityName"].ToString();
+
+                var role = RoleFactory.Create(roleName);
+
+                employee.AssignRole(role);
+            }
+        }
+
+        return employee;
+    }
+
+    public void AddCapabilityToEmployee(int employeeId, int capabilityId)
     {
         using var connection = DatabaseHelper.GetConnection();
         connection.Open();
 
-        using var command = new SqlCommand("sp_GetEmployeeById", connection);
+        using var command = new SqlCommand("sp_AddCapabilityToEmployee", connection);
+
         command.CommandType = CommandType.StoredProcedure;
 
-        command.Parameters.AddWithValue("@Id", id);
+        command.Parameters.AddWithValue("@EmployeeId", employeeId);
+        command.Parameters.AddWithValue("@CapabilityId", capabilityId);
 
-        using var reader = command.ExecuteReader();
-
-        if (!reader.Read())
-            return null;
-
-        var employee = new PermanentEmployee(
-            reader["Name"].ToString(),
-            reader["Department"].ToString(),
-            Convert.ToDecimal(reader["Salary"])
-        );
-
-        employee.SetId(Convert.ToInt32(reader["Id"]));
-
-        return employee;
+        command.ExecuteNonQuery();
     }
+
+
 
     public List<Employee> GetAllEmployees()
     {

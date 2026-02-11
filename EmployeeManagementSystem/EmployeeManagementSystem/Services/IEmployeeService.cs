@@ -15,5 +15,7 @@ namespace EmployeeManagementSystem.Services
         void RemoveEmployee(int id);
 
         int GetTeamSize(int managerId);
+
+        public void AddCapabilityToEmployee(int employeeId, int capabilityId);
     }
 }
