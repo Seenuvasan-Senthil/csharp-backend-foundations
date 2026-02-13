@@ -26,7 +26,7 @@ Ensure you have the following installed:
 ### 2. Clone the Repository
 
 ```bash
-git clone https://github.com/Seenuvasan-Senthil/csharp-backend-foundations.git
+git clone https://github.com/Seenuvasan-Senthil/csharp-backend-foundations/tree/assessment2-adonet-emp-management
 cd EmployeeManagementSystem
 
 ```
