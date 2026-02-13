@@ -92,14 +92,6 @@ ___
 
 ---
 
-Excellent choice. Including a troubleshooting section is a hallmark of a professional developer who anticipates user friction.
-
-Since SQL Server defaults to **Windows Authentication Only** during most installations, users trying to use your `User Id` and `Password` method often hit a wall.
-
-Here is the **Troubleshooting** section you can append to the bottom of your README:
-
----
-
 ## Troubleshooting
 
 ### 1. SQL Server Authentication Failure
