@@ -17,4 +17,16 @@
     <Folder Include="Database\03_StoredProcedures\" />
   </ItemGroup>
 
+  
+  <ItemGroup>
+  <None Update="appsettings.json">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+
+  <None Update="appsettings.example.json">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+  </ItemGroup>
+
+
 </Project>
