@@ -11,4 +11,9 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Database\02_Tables\" />
+    <Folder Include="Database\03_StoredProcedures\" />
+  </ItemGroup>
+
 </Project>
