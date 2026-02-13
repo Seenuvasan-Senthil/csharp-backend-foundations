@@ -8,8 +8,7 @@ namespace EmployeeManagementSystem.Data
 {
     public static class DatabaseHelper
     {
-        private static readonly string ConnectionString =
-    @"Server=APAC-FTDQ394\SQLEXPRESS;Database=EmployeeManagementSystemDB;User Id=appuser;Password=AppUser@123;TrustServerCertificate=True;";
+        private static readonly string ConnectionString = ConfigurationHelper.GetConnectionString();
 
         public static SqlConnection GetConnection()
         {
