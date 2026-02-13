@@ -26,7 +26,7 @@ Ensure you have the following installed:
 ### 2. Clone the Repository
 
 ```bash
-git clone https://github.com/Seenuvasan-Senthil/csharp-backend-foundations.git
+git clone https://github.com/Seenuvasan-Senthil/csharp-backend-foundations/tree/assessment2-adonet-emp-management
 cd EmployeeManagementSystem
 
 ```
@@ -89,14 +89,6 @@ ___
 * **Role-Based Access:** Assign and retrieve specific roles and capabilities for employees.
 * **Profile Management:** View detailed employee profiles governed by role-based logic.
 * **Secure Data Handling:** Utilizes Stored Procedures instead of inline SQL to improve security and performance.
-
----
-
-Excellent choice. Including a troubleshooting section is a hallmark of a professional developer who anticipates user friction.
-
-Since SQL Server defaults to **Windows Authentication Only** during most installations, users trying to use your `User Id` and `Password` method often hit a wall.
-
-Here is the **Troubleshooting** section you can append to the bottom of your README:
 
 ---
 
