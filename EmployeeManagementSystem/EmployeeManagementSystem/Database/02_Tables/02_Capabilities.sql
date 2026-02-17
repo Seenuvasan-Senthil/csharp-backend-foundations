@@ -6,7 +6,7 @@ CREATE TABLE Capabilities (
     Name NVARCHAR(50) NOT NULL
 );
 
-INSERT INTO Capabilities(Name) VALUES ('IApprover');
-INSERT INTO Capabilities(Name) VALUES ('ITeamSupervisor');
-INSERT INTO Capabilities(Name) VALUES ('ICodeContributer');
-INSERT INTO Capabilities(Name) VALUES ('ITestExecuter');
+INSERT INTO Capabilities (Name) VALUES
+('Manager'),
+('Developer'),
+('Tester');
