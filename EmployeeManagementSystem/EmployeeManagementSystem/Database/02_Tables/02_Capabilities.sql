@@ -8,5 +8,5 @@ CREATE TABLE Capabilities (
 
 INSERT INTO Capabilities (Name) VALUES
 ('Manager'),
-('Developer'),
-('Tester');
+('Tester'),
+('Developer');
