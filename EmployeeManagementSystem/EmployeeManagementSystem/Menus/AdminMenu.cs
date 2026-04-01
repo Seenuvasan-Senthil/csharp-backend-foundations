@@ -108,6 +108,8 @@ namespace EmployeeManagementSystem.Menus
                 Console.WriteLine($"Your Reporting Manager is :{manName}");
             }
 
+            List<int> capabilityIds = new List<int>();
+
             bool addingRoles = true;
 
             while (addingRoles)
@@ -124,16 +126,19 @@ namespace EmployeeManagementSystem.Menus
                 {
                     case "1":
                         employee.AssignRole(new ManagerRole());
+                        capabilityIds.Add(1);
                         Console.WriteLine("Manager Role Assigned.");
                         break;
 
                     case "2":
                         employee.AssignRole(new TesterRole());
+                        capabilityIds.Add(2);
                         Console.WriteLine("Tester Role Assigned.");
                         break;
 
                     case "3":
                         employee.AssignRole(new DeveloperRole());
+                        capabilityIds.Add(3);
                         Console.WriteLine("Developer Role Assigned.");
                         break;
 
@@ -155,6 +160,13 @@ namespace EmployeeManagementSystem.Menus
 
             _employeeService.AddEmployee(employee);
             Console.WriteLine("Employee Added Sucess fully");
+
+            foreach (var capabilityId in capabilityIds)
+            {
+                _employeeService.AddCapabilityToEmployee(employee.Id, capabilityId);
+            }
+
+            Console.WriteLine("Employee Capabilities Added Successfully");
         }
 
         private void RemoveEmployeeFlow()

@@ -1,66 +1,174 @@
-﻿using System;
-using System.Text;
+﻿using EmployeeManagementSystem.Data;
 using EmployeeManagementSystem.Entities;
-using System.Collections.Generic;
-using System.Linq;
+using EmployeeManagementSystem.Services;
+using Microsoft.Data.SqlClient;
+using System.Data;
+using EmployeeManagementSystem.Factories;
 
-//EmployeeService.cs->Implementation
-namespace EmployeeManagementSystem.Services
+public class EmployeeService : IEmployeeService
 {
-    public class EmployeeService : IEmployeeService
+    public void AddEmployee(Employee employee)
     {
-        //where do we store employees, private-no one outside should touch storage directly, readonly-reference should not change.
-        private readonly List<Employee> _employees;  
-        private int _nextId;
+        using var connection = DatabaseHelper.GetConnection();
+        connection.Open();
 
-        public EmployeeService()  //constructor public-Program.cs needs to create the service, service is an entry point.
+        using var command = new SqlCommand("sp_AddEmployee", connection);
+        command.CommandType = CommandType.StoredProcedure;
+
+        command.Parameters.AddWithValue("@Name", employee.Name);
+        command.Parameters.AddWithValue("@Department", employee.Department);
+        command.Parameters.AddWithValue("@Salary", employee.Salary);
+        command.Parameters.AddWithValue("@ManagerId",
+            (object?)employee.ManagerId ?? DBNull.Value);
+
+        int newId = Convert.ToInt32(command.ExecuteScalar());
+
+        employee.SetId(newId);
+
+        Console.WriteLine($"Employee saved to DB with ID: {newId}");
+    }
+
+    public Employee GetEmployeeById(int id)
+    {
+        Employee employee = null;
+
+        using var connection = DatabaseHelper.GetConnection();
+        connection.Open();
+
+        // Get Employee
+        using (var command = new SqlCommand("sp_GetEmployeeById", connection))
         {
-            //gurantees valid state, no null risks
-            _employees = new List<Employee>();
-            _nextId = 1;
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@Id", id);
+
+            using var reader = command.ExecuteReader();
+
+            if (reader.Read())
+            {
+                employee = new PermanentEmployee(
+                    reader["Name"].ToString(),
+                    reader["Department"].ToString(),
+                    Convert.ToDecimal(reader["Salary"])
+                );
+
+                employee.SetId(Convert.ToInt32(reader["Id"]));
+
+                if (reader["ManagerId"] != DBNull.Value)
+                    employee.AssignManager(Convert.ToInt32(reader["ManagerId"]));
+            }
         }
 
-        public void AddEmployee(Employee employee)  //we can pass developer, sre., etc - polymorphism used here
-        {
-            if (employee == null) throw new ArgumentNullException(nameof(employee));
-            employee.SetId(_nextId);
-            _nextId++;
+        if (employee == null)
+            return null;
 
-            _employees.Add(employee);
+        // Load Roles
+        using (var command = new SqlCommand("sp_GetRolesByEmployeeId", connection))
+        {
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@EmployeeId", id);
+
+            using var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var roleName = reader["CapabilityName"].ToString();
+
+                var role = RoleFactory.Create(roleName);
+
+                employee.AssignRole(role);
+            }
         }
 
-        public Employee GetEmployeeById(int id)
+        return employee;
+    }
+
+    public void AddCapabilityToEmployee(int employeeId, int capabilityId)
+    {
+        using var connection = DatabaseHelper.GetConnection();
+        connection.Open();
+
+        using var command = new SqlCommand("sp_AddCapabilityToEmployee", connection);
+
+        command.CommandType = CommandType.StoredProcedure;
+
+        command.Parameters.AddWithValue("@EmployeeId", employeeId);
+        command.Parameters.AddWithValue("@CapabilityId", capabilityId);
+
+        command.ExecuteNonQuery();
+    }
+
+
+
+    public List<Employee> GetAllEmployees()
+    {
+        var employees = new List<Employee>();
+
+        using var connection = DatabaseHelper.GetConnection();
+        connection.Open();
+
+        using var command = new SqlCommand("sp_GetAllEmployees", connection);
+        command.CommandType = CommandType.StoredProcedure;
+
+        using var reader = command.ExecuteReader();
+
+        while (reader.Read())
         {
-            return _employees.FirstOrDefault(e => e.Id == id); //no exception, caller decides how to handle null
+            var employee = new PermanentEmployee(
+                reader["Name"].ToString(),
+                reader["Department"].ToString(),
+                Convert.ToDecimal(reader["Salary"])
+            );
+
+            employee.SetId(Convert.ToInt32(reader["Id"]));
+
+            employees.Add(employee);
         }
 
-        public List<Employee> GetAllEmployees()
-        {
-            return new List<Employee>(_employees); //new list - prevents external modification, protects internal state - advanced encapsulation.
-        }
+        return employees;
+    }
 
-        public void UpdateSalary(int id, decimal newSalary)
-        {
-            var employee = GetEmployeeById(id);
+    public void UpdateSalary(int id, decimal newSalary)
+    {
+        using var connection = DatabaseHelper.GetConnection();
+        connection.Open();
 
-            if (employee == null) throw new InvalidOperationException("Employee not Found.");
+        using var command = new SqlCommand("sp_UpdateSalary", connection);
+        command.CommandType = CommandType.StoredProcedure;
 
-            employee.UpdateSalary(newSalary); //runtime polymorphism
-        }
+        command.Parameters.AddWithValue("@Id", id);
+        command.Parameters.AddWithValue("@Salary", newSalary);
 
-        public void RemoveEmployee(int id)
-        {
-            var employee = GetEmployeeById(id);
+        command.ExecuteNonQuery();
 
-            if (employee == null) throw new InvalidOperationException("Employee not Found");
+        Console.WriteLine("Salary updated in DB.");
+    }
 
-            _employees.Remove(employee);
-        }
+    public void RemoveEmployee(int id)
+    {
+        using var connection = DatabaseHelper.GetConnection();
+        connection.Open();
 
-        public int GetTeamSize(int managerId)  //team size is now calculated using emp service dynamic
-        {
-            return _employees.Count(e => e.ManagerId == managerId);
-        }
+        using var command = new SqlCommand("sp_DeleteEmployee", connection);
+        command.CommandType = CommandType.StoredProcedure;
 
+        command.Parameters.AddWithValue("@Id", id);
+
+        command.ExecuteNonQuery();
+
+        Console.WriteLine("Employee deleted from DB.");
+    }
+
+    public int GetTeamSize(int managerId)
+    {
+        using var connection = DatabaseHelper.GetConnection();
+        connection.Open();
+
+        string query = "SELECT COUNT(*) FROM Employees WHERE ManagerId = @ManagerId";
+
+        using var command = new SqlCommand(query, connection);
+
+        command.Parameters.AddWithValue("@ManagerId", managerId);
+
+        return (int)command.ExecuteScalar();
     }
 }

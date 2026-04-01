@@ -136,6 +136,13 @@ namespace EmployeeManagementSystem.Menus
                 return null;
 
             Employee employee = _employeeService.GetEmployeeById(id);
+            Console.WriteLine("DEBUG: Roles loaded:");
+
+            foreach (var role in employee.Roles)
+            {
+                Console.WriteLine(role.GetType().Name);
+            }
+
 
             if (employee == null) return null;
 
